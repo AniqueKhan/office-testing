@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ChatPDF</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{% static 'images/favicon.ico' %}"
+    />
+  </head>
+  <body>
+    
+    <div class="title">CHATPDF</div>
+    {% if messages %}
+    <div class="flash_messages">
+    
+
+    {% for message in messages  %}
+      {{message}}
+    {% endfor %}
+      
+    
+  </div>{% endif %}
+
+    <div id="container">
+      <aside>
+        <header>
+          <input type="text" placeholder="Search Chat....">
+        </header>
+        <a href="{% url 'index' %}">home</a>
+        <ul>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat One</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat Two</h2>
+            </div>
+          </li>
+          <li>
+            <div style="margin-left: 20%;">
+              <h2>Chat Three</h2>
+            </div>
+          </li>
+          
+        </ul>
+      </aside>
+      
+      <main>
+
+          
+        
+        {% if message %}
+          
+      
+          
+        <ul id="chat">
+          <li class="you">
+            <div class="entete">
+              <span class="status green"></span>
+              <h2>You</h2>
+            </div>
+            <div class="triangle"></div>
+            <div class="message">
+              {{message}}
+            </div>
+          </li>
+          <li class="me">
+            <div class="entete">
+              <h2>AI</h2>
+              <span class="status blue"></span>
+            </div>
+            <div class="triangle"></div>
+            <div class="message">
+              
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odio dolore laudantium harum officiis a magnam deleniti, dicta reprehenderit minus inventore. Officia explicabo illum natus saepe fugiat blanditiis veritatis voluptatibus accusantium!
+                
+            </div>
+          </li>
+
+
+          
+        </ul>
+        {% else %}
+          <div class="starting_conversation"><h1>Start A Conversation</h1></div>
+        
+        {% endif %}
+        <footer>
+          <form role="form" method="POST" action="{% url 'send_message' %}">
+            {% csrf_token %}
+            <div class="flex-grow-0 py-3 px-4 border-top">
+              <div class="input-group">
+                <textarea placeholder="Type your message" name="message" class="my-textarea"></textarea>
+                <button class="send_button" type="submit">Send</button>
+              </div>
+            </div>
+          </form> 
+          <form method="post" enctype="multipart/form-data" role="form" action="{% url 'upload_pdf' %}">
+            {% csrf_token %}
+            <label for="pdf_files" class="label_for_pdf_input">Upload PDF</label>
+            <input id="pdf_files" type="file" name="pdf_files" accept="application/pdf" multiple onchange="enableSubmit()">
+            <button type="submit" name="submit" disabled>Submit</button>
+          </form>
+          
+          
+          
+        </footer>
+      </main>
+    </div> 
+    <script>
+      // function enableSubmit() {
+      //   const input = document.getElementById('pdf_files');
+      //   const submitButton = document.querySelector('button[name="submit"]');
+      //   if (input.files.length > 0) {
+      //     submitButton.disabled = false;
+      //     input.removeAttribute('disabled');
+      //   }
+      // }
+      function enableSubmit() {
+  const input = document.getElementById('pdf_files');
+  const submitButton = document.querySelector('button[name="submit"]');
+  const files = input.files;
+  let isValid = true;
+
+  // Loop through selected files and check if they are PDF files
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const fileType = file.type;
+    if (fileType !== 'application/pdf') {
+      isValid = false;
+      break;
+    }
+  }
+
+  // Enable submit button only if all selected files are PDF files
+  if (isValid && files.length > 0) {
+    submitButton.disabled = false;
+    input.removeAttribute('disabled');
+  } else {
+    submitButton.disabled = true;
+  }
+}
+
+      </script>
+    
+  </body>
+</html>
