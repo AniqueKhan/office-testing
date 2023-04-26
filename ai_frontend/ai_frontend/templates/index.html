@@ -1,187 +1,132 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ChatPDF</title>
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <link
-      rel="shortcut icon"
-      type="image/png"
-      href="{% static 'images/favicon.ico' %}"
-    />
-  </head>
-  <body>
-    
-    <div class="title">CHATPDF</div>
-    {% if messages %}
-    <div class="flash_messages">
-    
 
-    {% for message in messages  %}
-      {{message}}
+<head>
+  <title>ChatPDF</title>
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+  <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}" />
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+</head>
+
+<body>
+
+  <div class="title">CHATPDF</div>
+  {% if messages %}
+  <div class="flash_messages">
+
+
+    {% for message in messages %}
+    {{message}}
     {% endfor %}
-      
-    
+
+
   </div>{% endif %}
 
-    <div id="container">
-      <aside>
-        <header>
-          <input type="text" placeholder="Search Chat....">
-        </header>
-        <a href="{% url 'index' %}">home</a>
-        <ul>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
+  <div id="container">
+    <aside>
+      <header>
+        <input type="text" placeholder="Search Chat....">
+      </header>
+      <ul>
 
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat One</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat Two</h2>
-            </div>
-          </li>
-          <li>
-            <div style="margin-left: 20%;">
-              <h2>Chat Three</h2>
-            </div>
-          </li>
-          
-        </ul>
-      </aside>
-      
-      <main>
+        <li><i style="padding-left: 20px;padding-top: 10px;" class="fas fa-plus"></i>
+          <div style="margin-left: 5%;">
+            <a href="{% url 'new_conversation' %}" style="text-decoration: none;"><h2>New Conversation</h2></a>
+            
+          </div>
+        </li>
+        {% for conversation in conversations %}
+        <li {% if conversation.selected_conversation %}
+        style="background-color: white;"
+        {% endif %}><i class="fa fa-comments" style="padding-left: 20px;padding-top: 10px;" aria-hidden="true"></i>
+          <div style="margin-left: 5%;">
+            <a href="{% url 'select_conversation' conversation.id %}" style="text-decoration: none;"
+              >
+              <h2 {% if conversation.selected_conversation %}
+              style="color:black"
+              {% endif %} >{{conversation}}</h2>
+            </a>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </aside>
 
-          
+    <main>
+      {% if selected_conversation %}
+
+      <ul id="chat">
         
-        {% if message %}
+        {% for message in selected_conversation.messages.all %}
+        <li class="you">
+          <div class="entete">
+            <span class="status green"></span>
+            <h2>You</h2>
+          </div>
+          <div class="triangle"></div>
+          <div class="message">
+            {{message.human_message}}
+          </div>
+        </li>
+        <li class="ai">
+          <div class="entete">
+            <h2>AI</h2>
+            <span class="status blue"></span>
+          </div>
+          <div class="triangle"></div>
+          <div class="message">
+
+            {{message.ai_message}}
+
+          </div>
+        </li>
+        {% endfor %}
+
+      </ul>
+      {% else %}
+
+      <div class="starting_conversation">
+        <h1>Start A Conversation</h1>
+      </div>
+
+      {% endif %}
+      <footer>
+        <form role="form" method="POST" action="{% url 'send_message' %}">
+          {% csrf_token %}
+          <div class="flex-grow-0 py-3 px-4 border-top">
+            <div class="input-group">
+              <textarea placeholder="Type your message" name="message" class="my-textarea" style="font-size: 16px; font-family: Arial, sans-serif;"></textarea>
+              <button class="send_button" type="submit"><i class="fas fa-paper-plane" style="margin-right: 10px;font-size: 20px;"></i>Send</button>
+            </div>
+          </div>
+        </form>
+        <form method="post" enctype="multipart/form-data" role="form" action="{% url 'upload_pdf' %}">
+          {% csrf_token %}
+          <label for="pdf_files" class="label_for_pdf_input"><i class="far fa-file-pdf" style="margin-right: 10px;font-size: 20px;"></i>Upload PDF</label>
           
-      
-          
-        <ul id="chat">
-          <li class="you">
-            <div class="entete">
-              <span class="status green"></span>
-              <h2>You</h2>
-            </div>
-            <div class="triangle"></div>
-            <div class="message">
-              {{message}}
-            </div>
-          </li>
-          <li class="me">
-            <div class="entete">
-              <h2>AI</h2>
-              <span class="status blue"></span>
-            </div>
-            <div class="triangle"></div>
-            <div class="message">
-              
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odio dolore laudantium harum officiis a magnam deleniti, dicta reprehenderit minus inventore. Officia explicabo illum natus saepe fugiat blanditiis veritatis voluptatibus accusantium!
-                
-            </div>
-          </li>
+          <input id="pdf_files" type="file" name="pdf_files" accept="application/pdf" multiple
+            onchange="enablePdfSubmit()">
+          <button type="submit" name="submit" class="pdf_submit" disabled>Submit</button>
+        </form>
 
 
-          
-        </ul>
-        {% else %}
-          <div class="starting_conversation"><h1>Start A Conversation</h1></div>
-        
-        {% endif %}
-        <footer>
-          <form role="form" method="POST" action="{% url 'send_message' %}">
-            {% csrf_token %}
-            <div class="flex-grow-0 py-3 px-4 border-top">
-              <div class="input-group">
-                <textarea placeholder="Type your message" name="message" class="my-textarea"></textarea>
-                <button class="send_button" type="submit">Send</button>
-              </div>
-            </div>
-          </form> 
-          <form method="post" enctype="multipart/form-data" role="form" action="{% url 'upload_pdf' %}">
-            {% csrf_token %}
-            <label for="pdf_files" class="label_for_pdf_input">Upload PDF</label>
-            <input id="pdf_files" type="file" name="pdf_files" accept="application/pdf" multiple onchange="enableSubmit()">
-            <button type="submit" name="submit" disabled>Submit</button>
-          </form>
-          
-          
-          
-        </footer>
-      </main>
-    </div> 
-    <script>
-      // function enableSubmit() {
-      //   const input = document.getElementById('pdf_files');
-      //   const submitButton = document.querySelector('button[name="submit"]');
-      //   if (input.files.length > 0) {
-      //     submitButton.disabled = false;
-      //     input.removeAttribute('disabled');
-      //   }
-      // }
-      function enableSubmit() {
+      </footer>
+    </main>
+  </div>
+  <script>
+  
+
+
+
+  function enablePdfSubmit() {
+
   const input = document.getElementById('pdf_files');
   const submitButton = document.querySelector('button[name="submit"]');
   const files = input.files;
@@ -206,7 +151,15 @@
   }
 }
 
-      </script>
-    
-  </body>
+
+  </script>
+  <script>
+    setTimeout(function () {
+      var messageList = document.getElementsByClassName("flash_messages")[0];
+      messageList.style.display = "none";
+    }, 3000);
+  </script>
+
+</body>
+
 </html>

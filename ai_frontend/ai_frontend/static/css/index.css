@@ -6,7 +6,7 @@
     font-family:Arial;
   }
   #container{
-    width:950px;
+    width:1550px;
     height:800px;
     background:#eff3f7;
     margin:0 auto;
@@ -30,7 +30,7 @@
     background-color: #58b666;
   }
   aside{
-    width:260px;
+    width:360px;
     height:800px;
     background-color:#3b3e49;
     display:inline-block;
@@ -38,7 +38,7 @@
     vertical-align:top;
   }
   main{
-    width:690px;
+    width:1190px;
     height:800px;
     display:inline-block;
     font-size:15px;
@@ -59,7 +59,7 @@
     color:#fff;
     background-image:url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_search.png);
     background-repeat:no-repeat;
-    background-position:170px;
+    background-position:250px;
     background-size:40px;
   }
   aside input::placeholder{
@@ -182,29 +182,18 @@
     display:inline-block;
     text-align:left;
     border-radius:5px;
+    width: fit-content;
+    max-width: 100%;
+    word-wrap: break-word;
   }
-  #chat .me{
+  #chat .ai{
     text-align:right;
   }
   #chat .you .message{
     background-color:#58b666;
   }
-  #chat .me .message{
+  #chat .ai .message{
     background-color:#6fbced;
-  }
-  #chat .triangle{
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 10px 10px 10px;
-  }
-  #chat .you .triangle{
-      border-color: transparent transparent #58b666 transparent;
-      margin-left:15px;
-  }
-  #chat .me .triangle{
-      border-color: transparent transparent #6fbced transparent;
-      margin-left:375px;
   }
   
   main footer{
@@ -221,16 +210,21 @@
     padding:20px;
     font-size:13px;
     margin-bottom:13px;
+    white-space: pre;
   }
   main footer textarea::placeholder{
-    color:#ddd;
+    color:black;
+  }
+  main footer textarea:focus{
+    border: 2px solid #6fbced;
+  outline: none;
   }
   main footer img{
     height:30px;
     cursor:pointer;
   }
   
-  .send_button,.upload_pdf_button,.custom-upload-button {
+  .send_button,.pdf_submit{
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
@@ -242,10 +236,13 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-left:500px;
   }
   
-  .send_button:hover,.custom-upload-button:hover {
+  .send_button{
+    margin-left:1000px;
+  }
+  
+  .send_button:hover,.label_for_pdf_input:hover {
     background-color: #58b666;
   }
   
@@ -269,7 +266,8 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-left:50px;
+    margin-left:10px;
   }
+  
 
   
